@@ -9,3 +9,4 @@ class Operation(Base):
 
     id = sa.Column(sa.Integer, primary_key=True)
     date = sa.Column(sa.Date)
+    name = sa.Column(sa.String)
