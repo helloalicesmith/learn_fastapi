@@ -1,4 +1,5 @@
-from fastapi import Depends
+from fastapi import Depends, status
+from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
 
 from my_app.models.operations import OperationCreate
@@ -16,6 +17,9 @@ class OperationsService:
                 .query(tables.Operation)
                 .all()
         )
+
+        if not tables.Operation:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
         return operations
 
     def create(self, operation_date: OperationCreate) -> tables.Operation:
@@ -24,3 +28,16 @@ class OperationsService:
         self.session.commit()
 
         return operation
+
+    def delete(self, operation_id: int) -> int:
+        operation = (
+                self.session
+                .query(tables.Operation)
+                .filter_by(id=operation_id)
+                .first()
+        )
+        self.session.delete(operation)
+        self.session.commit()
+
+        return operation_id
+

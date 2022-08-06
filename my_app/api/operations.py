@@ -22,3 +22,9 @@ def create_operation(
 ):
     return service.create(operation_date)
 
+@router.delete('/delete')
+def delete_operation(
+        operation_id: int,
+        service: operations.OperationsService = Depends(),
+):
+    return service.delete(operation_id)
